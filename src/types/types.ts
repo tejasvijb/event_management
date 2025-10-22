@@ -35,6 +35,7 @@ export const eventSchema = z.object({
     location: z.string().min(5).max(200),
     organizerId: z.string().uuid(),
     createdAt: z.date(),
+    participants: z.array(z.string().uuid()).optional().default([]),
 });
 
 // Schema for creating a new event (excludes id, organizerId, and createdAt which are set by the server)
@@ -51,6 +52,13 @@ export const createEventSchema = eventSchema
 // Schema for updating an existing event (makes all fields optional)
 export const updateEventSchema = createEventSchema.partial();
 
+// Registration schema
+export const registrationSchema = z.object({
+    eventId: z.string().uuid(),
+    userId: z.string().uuid(),
+});
+
 export type Event = z.infer<typeof eventSchema>;
 export type CreateEvent = z.infer<typeof createEventSchema>;
 export type UpdateEvent = z.infer<typeof updateEventSchema>;
+export type Registration = z.infer<typeof registrationSchema>;

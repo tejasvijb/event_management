@@ -7,6 +7,11 @@ import {
     updateEvent,
     deleteEvent,
     isOrganizer,
+    isAttendee,
+    registerForEvent,
+    getEventRegistrations,
+    checkRegistrationStatus,
+    cancelRegistration,
 } from "../controllers/eventController.js";
 import { validateRequestBody } from "../middleware/validateRequestBody.js";
 import { createEventSchema, updateEventSchema } from "../../../types/types.js";
@@ -39,5 +44,17 @@ router.put(
 
 // Delete an event - only the organizer who created it
 router.delete("/:id", validateToken, isOrganizer, deleteEvent);
+
+// Register for an event - only attendees
+router.post("/:id/register", validateToken, isAttendee, registerForEvent);
+
+// Get event registrations - only organizers or the event creator
+router.get("/:id/registrations", validateToken, getEventRegistrations);
+
+// Check if the current user is registered for an event
+router.get("/:id/registration-status", validateToken, checkRegistrationStatus);
+
+// Cancel registration for an event
+router.delete("/:id/register", validateToken, cancelRegistration);
 
 export default router;
